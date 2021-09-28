@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## Welcome to McKinley Harlett's Projects
 
 You can use the [editor on GitHub](https://github.com/mckinleyharlett/mckinleyharlett/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
