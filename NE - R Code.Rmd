@@ -1,0 +1,84 @@
+---
+title: "Project 1 - R Code"
+author: "McKinley Harlett"
+date: "9/13/2021"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+#### Libraries
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+```
+
+### Data
+```{r}
+NFL_Scores <- read_xlsx("NFL Scores.xlsx")
+
+names(NFL_Scores) <- NFL_Scores[1,]
+NFL_Scores <- NFL_Scores[-1,]
+
+head(NFL_Scores)
+```
+
+### Data Preparation
+
+#### Limiting date to show 2000
+```{r}
+current <- NFL_Scores %>% 
+  filter(schedule_season > 2000)
+```
+
+#### Check for Null's in the columns
+```{r}
+lapply(current,function(x) { length(which(is.na(x)))})
+```
+
+#### Keeping certain columns
+```{r}
+current2 <- current %>%
+  select(schedule_date, schedule_season, schedule_playoff, 
+         team_home, team_away, score_home, score_away,
+         stadium, weather_temperature, weather_wind_mph, weather_humidity)
+```
+
+#### Finding Home and Away where it's Tampa Bay
+```{r}
+current2$home_or_awayNE <- ifelse(current2$team_home == "New England Patriots", 1,0)
+```
+
+
+### Tampa Bay Buccaneers
+```{r}
+NE <- current2 %>% 
+  filter(team_home == "New England Patriots" | team_away == "New England Patriots")
+```
+
+#### Creating Scores
+```{r}
+NE$score <- ifelse(NE$team_away == "New England Patriots", NE$score_away, NE$score_home)
+
+NE <- NE %>%
+  drop_na()
+
+head(NE)
+```
+
+#### Final TB Dataset
+```{r}
+FinalNE <- NE %>%
+  select(home_or_awayNE, weather_temperature, weather_wind_mph, score)
+```
+
+```{r}
+FinalNE
+```
+
+
+```{r}
+write.csv(FinalNE,"C:\\Users\\mckinleyharlett\\Desktop - Local\\NewEngland.csv" )
+```
