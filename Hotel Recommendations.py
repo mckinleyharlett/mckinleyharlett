@@ -1,9 +1,6 @@
-#!/usr/bin/env python
-# coding: utf-8
+# McKinley Harlett
 
 # # Hotel Recommendations
-
-# In[1]:
 
 
 # Packages
@@ -27,37 +24,23 @@ warnings.filterwarnings('ignore')
 
 # ## Loading Data
 
-# In[2]:
-
-
 # Limited the number of rows 
 train = pd.read_csv('train.csv', nrows=18500000)
-
-
-# In[3]:
 
 
 dest = pd.read_csv('destinations.csv')
 
 
-# ## EDA
-
-# In[4]:
+### EDA
 
 
 train.head()
-
-
-# In[5]:
 
 
 dest.head()
 
 
 # #### Density Plot of Hotel Clusters
-
-# In[6]:
-
 
 # Wanting to see if there are any hotel clusters that stand out from the rest.
 sns.distplot(train['hotel_cluster'])
@@ -68,20 +51,11 @@ plt.show()
 
 # #### Heat map
 
-# In[7]:
-
 
 sns.set(style="white")
 
-
-# In[8]:
-
-
 # Grabbing correlation
 corr = train.corr()
-
-
-# In[9]:
 
 
 # This allows blanks for the upper part of our heat map
@@ -89,14 +63,8 @@ mask = np.zeros_like(corr, dtype=np.bool)
 mask[np.triu_indices_from(mask)] = True
 
 
-# In[10]:
-
-
 # found this awesome color palette online
 cmap = sns.diverging_palette(220, 10, as_cmap=True)
-
-
-# In[11]:
 
 
 # Draw the heatmap with the blanks and correct aspect ratio   
@@ -106,9 +74,6 @@ plt.figure(figsize=(5,5), dpi=2000)
 
 sns_plot=sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.5, center=0,
             square=True, linewidths=.5, cbar_kws={"shrink": .5})
-
-
-# In[12]:
 
 
 # I want to condense my data
@@ -131,9 +96,6 @@ for chunk in train_chunk:
 
 # ### Changing Date
 
-# In[14]:
-
-
 sample_train['date_time'] = pd.to_datetime(sample_train['date_time'])
 sample_train['year'] = sample_train['date_time'].dt.year
 sample_train['month'] = sample_train['date_time'].dt.month
@@ -141,14 +103,9 @@ sample_train['month'] = sample_train['date_time'].dt.month
 
 # #### Splitting our Data
 
-# In[15]:
-
 
 train2 = sample_train[((sample_train.year == 2013) | ((sample_train.year == 2014) & (sample_train.month < 8)))]
 test2 = sample_train[((sample_train.year == 2014) & (sample_train.month >= 8))]
-
-
-# In[16]:
 
 
 # Wanting our test data to booking data only
@@ -160,21 +117,13 @@ test2.head()
 
 # #### Most common hotel clusters
 
-# In[17]:
-
 
 most_common_clusters = list(train2.hotel_cluster.value_counts().head().index)
 print(most_common_clusters)
 
 
-# In[18]:
-
-
 # We want to use the most common clusters as our first list of predictions for each row in test2.
 predictions = [most_common_clusters for i in range(test2.shape[0])]
-
-
-# In[19]:
 
 
 target = [[l] for l in test2['hotel_cluster']]
@@ -187,9 +136,6 @@ metrics.mapk(target, predictions, k=5)
 # ## Machine Learning
 
 # Want just a couple features from Dest file
-
-# In[20]:
-
 
 # Found this awesome PCA package that will allow me to compress the columns
 
@@ -206,8 +152,6 @@ dest_small["srch_destination_id"] = dest["srch_destination_id"]
 # ###### Remove the date_time column since it's not needed  
 # ###### add features from dest_small 
 # ###### Replace any missing values with -1 
-
-# In[21]:
 
 
 def calc_fast_features(df):
@@ -239,16 +183,10 @@ df = calc_fast_features(train2)
 df.fillna(-1, inplace=True)
 
 
-# In[22]:
-
-
 df.head()
 
 
 # ## Algorithm 2: Random Forest Classifier
-
-# In[23]:
-
 
 predictors = [c for c in df.columns if c not in ["hotel_cluster"]]
 
@@ -266,8 +204,6 @@ scores
 # ##### I did infact read through this and typed it all out and "made it my own"
 # 
 # ##### I understand what is being coded and the thought process behind it
-
-# In[34]:
 
 
 def make_key(items):
@@ -289,9 +225,6 @@ for name, group in groups:
     top_clusters[clus_name][name[-1]] = score
 
 
-# In[35]:
-
-
 # Looking for the top 7 hotel clusters
 import operator
 
@@ -301,8 +234,6 @@ for n in top_clusters:
     top = [l[0] for l in sorted(tc.items(), key=operator.itemgetter(1), reverse=True)[:7]] # Top 7 Hotels
     cluster_dict[n] = top
 
-
-# In[36]:
 
 
 preds = []
@@ -314,13 +245,7 @@ for index, row in test2.iterrows():
         preds.append([])
 
 
-# In[37]:
-
-
 preds[0:5]
-
-
-# In[38]:
 
 
 metrics.mapk([[l] for l in test2["hotel_cluster"]], preds, k=7)
