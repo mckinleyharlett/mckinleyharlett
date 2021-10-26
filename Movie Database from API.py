@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Activity 10
+# McKinley Harlett
 
 # ## Building your own movie database by reading from an API
 
@@ -16,7 +13,6 @@ import json
 # Hint: Use json.loads()
 # 
 # Note: The following cell will not be executed in the solution notebook because the author cannot give out his private API key.
-# Students/users/instructor will need to obtain a key and store in a JSON file.
 # For the code's sake, we are calling this file APIkeys.json. But you need to store your own key in this file.
 # An example file called "APIkey_Bogus_example.json" is given along with the notebook. Just change the code in this file and rename as APIkeys.json. The file name does not matter of course.
 
