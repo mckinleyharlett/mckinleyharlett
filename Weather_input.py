@@ -1,9 +1,4 @@
-# DSC510
-# Week 11
-# 11.1 Programming Assignment
 # McKinley Harlett
-# 11/13/2020
-# Create a header for your program just as you have in the past.
 # Create a Python Application which asks the user for their zip code or city.
 # Use the zip code or city name in order to obtain weather forecast data from OpenWeatherMap.
 # Display the weather forecast in a readable format to the user.
