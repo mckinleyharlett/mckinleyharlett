@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Milestone 5: COVID-19 Data
+# McKinley Harlett
 
 # In[63]:
 
