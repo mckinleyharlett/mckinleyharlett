@@ -1,6 +1,6 @@
 # McKinley Harlett
 
-# # Neural Network Classifier Exercises
+# # Neural Network Classifier with Twitter Data
 
 
 # Packages 
