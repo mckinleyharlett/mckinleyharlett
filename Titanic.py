@@ -1,10 +1,6 @@
-#!/usr/bin/env python
-# coding: utf-8
+# McKinley Harlett
 
 # # Titanic Case Study
-
-# In[1]:
-
 
 import pandas as pd
 import yellowbrick
@@ -14,33 +10,22 @@ from yellowbrick.features import Rank2D
 
 # ### 1.	Load the data from the “train.csv” file into a DataFrame
 
-# In[2]:
-
 
 data = pd.read_csv("train.csv")
 
 
 # ### 2.	Display the dimensions of the file (so you’ll have a good idea the amount of data you are working with.
 
-# In[3]:
-
-
 print("Dimension of the table is: {}".format(data.shape))
 
 
 # ### 3.	Display the first 5 rows of data so you can see the column headings and the type of data for each column
-
-# In[4]:
-
-
 data.head(5)
 
 
 # ### 4.	Look at summary information about your data (total, mean, min, max, freq, unique, etc.)  Does this present any more questions for you?  Does it lead you to a conclusion yet?  
-# 
-# It is interesting to see that only 38% of the people survived. It is also interesting to see that the average age was 29 and the Pclass was actually 2. My questions would be why are more tickets than unique tickets!
 
-# In[5]:
+# It is interesting to see that only 38% of the people survived. It is also interesting to see that the average age was 29 and the Pclass was actually 2. My questions would be why are more tickets than unique tickets!
 
 
 print("Describe Data")
@@ -51,13 +36,8 @@ print(data.describe(include=['O']))
 
 # ### 6.	Make some histograms of your data (“A picture is worth a thousand words!”)
 
-# In[6]:
-
 
 plt.rcParams['figure.figsize'] = (20, 10)
-
-
-# In[9]:
 
 
 # make subplots
@@ -76,8 +56,6 @@ plt.show()
 
 
 # ### 7.	Make some bar charts for variables with only a few options.
-
-# In[10]:
 
 
 plt.rcParams['figure.figsize'] = (20, 10)
@@ -122,9 +100,6 @@ plt.show()
 
 # ### 8.	To see if the data is correlated, make some Pearson Ranking charts
 
-# In[11]:
-
-
 plt.rcParams['figure.figsize'] = (15, 7)
 X = data[num_features].to_numpy()
 visualizer = Rank2D(features=num_features, algorithm='pearson')
@@ -136,31 +111,16 @@ plt.show()
 
 # ### Use Parallel Coordinates visualization to compare the distributions of numerical variables between passengers that survived and those that did not survive.
 
-# In[12]:
-
-
 plt.rcParams['figure.figsize'] = (15, 7)
 plt.rcParams['font.size'] = 50
 
-
-# In[13]:
-
-
 from yellowbrick.style import set_palette
 set_palette('sns_bright')
-
-
-# In[14]:
-
 
 from yellowbrick.features import ParallelCoordinates
 # Specify the features of interest and the classes of the target
 classes = ['Not-survived', 'Survived']
 num_features = ['Age', 'SibSp', 'Parch', 'Fare']
-
-
-# In[15]:
-
 
 data_norm = data.copy()
 # normalize data to 0-1 range
@@ -168,20 +128,10 @@ for feature in num_features:
     data_norm[feature] = (data[feature] - data[feature].mean(skipna=True)) / (data[feature].max(skipna=True) - data[feature].min(skipna=True))
 
 
-# In[16]:
-
-
 X = data_norm[num_features].to_numpy()
 y = data.Survived.to_numpy()
 
-
-# In[17]:
-
-
 visualizer = ParallelCoordinates(classes=classes, features=num_features)
-
-
-# In[18]:
 
 
 visualizer.fit(X, y)      # Fit the data to the visualizer
@@ -190,15 +140,10 @@ visualizer.transform(X)   # Transform the data
 plt.show();
 
 
-# In[19]:
-
-
 plt.rcParams['figure.figsize'] = (20, 10)
 
 
 # ### 10.	Use Stack Bar Charts to compare passengers who survived to passengers who didn’t survive based on the other variables.
-
-# In[26]:
 
 
 # make subplots
@@ -242,42 +187,23 @@ axes[1, 0].legend((p5[0], p6[0]), ('Survived', 'Not-survived'), fontsize = 15)
 plt.show()
 
 
-# # Week 7 Steps for Titanic Case 
-
-# In[27]:
+# # Steps for Titanic Case 
 
 
-# Step 11 - fill in missing values and eliminate features
+# 11 - fill in missing values and eliminate features
 #fill the missing age data with median value
 def fill_na_median(data, inplace=True):
     return data.fillna(data.median(), inplace=inplace)
 
 fill_na_median(data['Age'])
-
-
-# In[28]:
-
-
 print(data['Age'].describe())
-
-
-# In[29]:
-
 
 # fill with the most represented value
 def fill_na_most(data, inplace=True):
     return data.fillna('S', inplace=inplace)
 fill_na_most(data['Embarked'])
 
-
-# In[30]:
-
-
 print(data['Embarked'].describe())
-
-
-# In[31]:
-
 
 # import package
 import numpy as np
@@ -286,23 +212,12 @@ import numpy as np
 def log_transformation(data):
     return data.apply(np.log1p)
 
-
-# In[32]:
-
-
 data['Fare_log1p'] = log_transformation(data['Fare'])
-
-
-# In[33]:
 
 
 print(data.describe())
 
-
-# In[34]:
-
-
-#Step 12 - adjust skewed data (fare)
+# 12 - adjust skewed data (fare)
 #check the distribution using histogram
 # set up the figure size
 get_ipython().run_line_magic('matplotlib', 'inline')
@@ -314,11 +229,7 @@ plt.ylabel('Counts', fontsize=20)
 plt.tick_params(axis='both', labelsize=15)
 plt.show()
 
-
-# In[35]:
-
-
-#Step 13 - convert categorical data to numbers
+# 13 - convert categorical data to numbers
 #get the categorical data
 cat_features = ['Pclass', 'Sex', "Embarked"]
 data_cat = data[cat_features]
@@ -328,42 +239,22 @@ data_cat_dummies = pd.get_dummies(data_cat)
 # check the data
 print(data_cat_dummies.head(8))
 
-
-# # Part 3
-
-# ### Step 14 - create a whole features dataset that can be used for train and validation data splitting
-
-# In[54]:
-
+# ### 14 - create a whole features dataset that can be used for train and validation data splitting
 
 # here we will combine the numerical features and the dummie features together
 features_model = ['Age', 'SibSp', 'Parch', 'Fare_log1p']
 data_model_X = pd.concat([data[features_model], data_cat_dummies], axis=1)
 
 
-# In[55]:
-
-
 # create a whole target dataset that can be used for train and validation data splitting
 data_model_y = data.replace({'Survived': {1: 'Survived', 0: 'Not_survived'}})['Survived']
-
-
-# In[56]:
-
 
 # separate data into training and validation and check the details of the datasets
 # import packages
 from sklearn.model_selection import train_test_split
 
-
-# In[57]:
-
-
 # split the data
 X_train, X_val, y_train, y_val = train_test_split(data_model_X, data_model_y, test_size =0.3, random_state=11)
-
-
-# In[58]:
 
 
 # number of samples in each set
@@ -380,43 +271,25 @@ print('Number of survived and not-survived in the validation set:')
 print(y_val.value_counts())
 
 
-# ### Step 15 - Eval Metrics
-
-# In[71]:
-
+# ### 15 - Eval Metrics
 
 from sklearn.linear_model import LogisticRegression
 from yellowbrick.classifier import ConfusionMatrix
 from yellowbrick.classifier import ClassificationReport
 from yellowbrick.classifier import ROCAUC
 
-
-# In[72]:
-
-
 # Instantiate the classification model 
 model = LogisticRegression(solver='liblinear')
-
-
-# In[73]:
 
 
 # The ConfusionMatrix visualizer taxes a model
 classes = ['Not_survived','Survived']
 cm = ConfusionMatrix(model, classes=classes, percent=False)
 
-
-# In[76]:
-
-
 # To create the ConfusionMatrix, we need some test data. Score runs predict() on the data
 # and then creates the confusion_matrix from scikit learn.
 cm.fit(X_train, y_train)
 cm.score(X_val, y_val)
-
-
-# In[77]:
-
 
 # Precision, Recall, and F1 Score
 # set the size of the figure and the font size 
@@ -431,10 +304,6 @@ visualizer.fit(X_train, y_train)  # Fit the training data to the visualizer
 visualizer.score(X_val, y_val)  # Evaluate the model on the test data
 g = visualizer.poof()
 
-
-# In[78]:
-
-
 ## ROC and AUC
 # Instantiate the classification model 
 model = LogisticRegression(solver='liblinear')
@@ -446,10 +315,3 @@ visualizer = ROCAUC(model) # classes=['Not_survived', 'Survived']
 visualizer.fit(X_train, y_train)  # Fit the training data to the visualizer
 visualizer.score(X_val, y_val)  # Evaluate the model on the test data
 g = visualizer.poof()
-
-
-# In[ ]:
-
-
-
-
